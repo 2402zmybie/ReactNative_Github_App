@@ -3,6 +3,15 @@
  */
 export default class NaivigationUtil {
 
+
+    static goPage(page) {
+
+        const navigation = NaivigationUtil.navigation;
+        navigation.navigate(
+            page
+        )
+    }
+
     static goBack(navigation) {
         navigation.goBack();
     }

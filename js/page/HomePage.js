@@ -10,49 +10,22 @@ import MyPage from './MyPage'
 
 //导入图标
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import Foundation from 'react-native-vector-icons/Foundation'
+
+//引入底部动态组件库
+import DynamicTabNavigator from '../navigation/DynamicTabNavigator'
+//导入组件跳转
+import NaivigationUtil from '../navigation/NaivigationUtil'
 
 export default class HomePage extends Component<Props> {
 
-    _tabNavigator() {
-        return createBottomTabNavigator({
-            PopularPage: {
-                screen: PopularPage,
-                navigationOptions: {
-                    tabBarLabel:'最热',
-                    tabBarIcon: ({tintColor,focused}) => {
-                        <MaterialIcons
-                            name={'whatshot'}
-                            size={26}
-                            style={{color:tintColor}}
-                        />
-                    }
-                }
-            },
-            TrendingPage: {
-                screen: TrendingPage
-            },
-            FavoritePage: {
-                screen: FavoritePage
-            },
-            MyPage: {
-                screen: MyPage
-            }
-        })
-    }
-
     render() {
-        const Tab = this._tabNavigator();
+        NaivigationUtil.navigation = this.props.navigation;
         return (
-            <Tab />
+            <DynamicTabNavigator />
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
-})
 
