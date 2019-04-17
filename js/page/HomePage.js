@@ -8,12 +8,25 @@ import TrendingPage from './TrendingPage'
 import FavoritePage from './FavoritePage'
 import MyPage from './MyPage'
 
+//导入图标
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+
 export default class HomePage extends Component<Props> {
 
     _tabNavigator() {
         return createBottomTabNavigator({
             PopularPage: {
-                screen: PopularPage
+                screen: PopularPage,
+                navigationOptions: {
+                    tabBarLabel:'最热',
+                    tabBarIcon: ({tintColor,focused}) => {
+                        <MaterialIcons
+                            name={'whatshot'}
+                            size={26}
+                            style={{color:tintColor}}
+                        />
+                    }
+                }
             },
             TrendingPage: {
                 screen: TrendingPage
