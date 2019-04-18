@@ -1,0 +1,29 @@
+setParams设置的属性 都会存放在navigation的state里面
+
+动态设置底部导航栏:
+createBottomTabNavigator(tabs, {
+            tabBarComponent: TabBarComponent
+        });
+
+class TabBarComponent extends React.Component {
+    constructor(props) {
+        super(props);
+        this.theme = {
+            tintColor: props.activeTintColor,
+            updateTime:new Date().getTime()
+        }
+    }
+    render() {
+        const {routes,index} = this.props.navigation.state;
+        if(routes[index].params) {
+            const { theme } = routes[index].params;
+            if(theme && theme.updateTime > this.theme.updateTime) {
+                this.theme = theme
+            }
+        }
+        return <BottomTabBar
+            {...this.props}
+            activeTintColor={this.theme.tintColor || this.props.activeTintColor}
+        />
+    }
+}

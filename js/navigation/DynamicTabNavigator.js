@@ -106,6 +106,13 @@ class TabBarComponent extends React.Component {
         }
     }
     render() {
+        const {routes,index} = this.props.navigation.state;
+        if(routes[index].params) {
+            const { theme } = routes[index].params;
+            if(theme && theme.updateTime > this.theme.updateTime) {
+                this.theme = theme
+            }
+        }
         return <BottomTabBar
             {...this.props}
             activeTintColor={this.theme.tintColor || this.props.activeTintColor}
