@@ -18,6 +18,8 @@ import Foundation from 'react-native-vector-icons/Foundation'
 import NaivigationUtil from '../navigation/NaivigationUtil'
 //动态配置底部TabBar样式
 import { BottomTabBar } from 'react-navigation-tabs'
+//导入react-redux
+import { connect } from 'react-redux'
 
 const TABS = {
     PopularPage: {
@@ -74,16 +76,21 @@ const TABS = {
     }
 };
 
-export default class DynamicTabNavigator extends Component<Props> {
+class DynamicTabNavigator extends Component<Props> {
 
     _tabNavigator() {
+        if(this.Tabs) {
+            return this.Tabs;
+        }
         //自定义底部的Tab
         const { PopularPage,TrendingPage,FavoritePage,MyPage } = TABS;
         const tabs = {PopularPage,TrendingPage,FavoritePage,MyPage}
         //动态配置Tab属性
         PopularPage.navigationOptions.tabBarLabel = '最新呀'
-        return createBottomTabNavigator(tabs, {
-            tabBarComponent: TabBarComponent
+        return this.Tabs = createBottomTabNavigator(tabs, {
+            tabBarComponent: props => {
+                return <TabBarComponent theme={this.props.theme} {...props}/>
+            }
         });
     }
 
@@ -99,23 +106,24 @@ export default class DynamicTabNavigator extends Component<Props> {
 
 class TabBarComponent extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.theme = {
             tintColor: props.activeTintColor,
             updateTime:new Date().getTime()
         }
     }
+
     render() {
-        const {routes,index} = this.props.navigation.state;
-        if(routes[index].params) {
-            const { theme } = routes[index].params;
-            if(theme && theme.updateTime > this.theme.updateTime) {
-                this.theme = theme
-            }
-        }
         return <BottomTabBar
             {...this.props}
-            activeTintColor={this.theme.tintColor || this.props.activeTintColor}
+            activeTintColor={this.props.theme}
         />
     }
 }
+
+//使用react-redux
+const mapStateToProps = state => ({
+    theme: state.theme.theme   //将state里面的theme关联到props里面的theme
+})
+
+export default connect(mapStateToProps)(DynamicTabNavigator)

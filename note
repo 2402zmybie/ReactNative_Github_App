@@ -27,3 +27,26 @@ class TabBarComponent extends React.Component {
         />
     }
 }
+
+设置顶部导航栏的属性:
+render() {
+        const TopTab = createMaterialTopTabNavigator(this._genTabs(),{
+            tabBarOptions: {
+                tabStyle:styles.tabStyle,
+                scrollEnabled:true,
+                upperCaseLabel:false,
+                style: {
+                    backgroundColor:'#678'
+                },
+                indicatorStyle:styles.indicatorStyle,
+                labelStyle:styles.labelStyle
+            }
+        })
+        return <TopTab/>
+    }
+
+在React Native中使用Redux和react-naivgaiton组合
+npm i --save react-navigation-redux-helpers@2.0.9
+npm i redux@4.0.1
+npm i react-redux@5.1.0
+npm i redux-thunk@2.3.0
