@@ -53,6 +53,9 @@ class PopularTab extends Component<Props> {
                 <Text onPress={() => {
                     NaivigationUtil.goPage("DetailPage")
                 }}>跳转到详情页</Text>
+                <Text onPress={() => {
+                    NaivigationUtil.goPage("FetchDemoPage")
+                }}>Fetch Demo</Text>
             </View>
         )
     }
