@@ -1,25 +1,39 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
-
-import {createBottomTabNavigator} from 'react-navigation'
-//导入首页底部的四个页面
-import PopularPage from './PopularPage'
-import TrendingPage from './TrendingPage'
-import FavoritePage from './FavoritePage'
-import MyPage from './MyPage'
-
-//导入图标
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-import Foundation from 'react-native-vector-icons/Foundation'
 
 //引入底部动态组件库
 import DynamicTabNavigator from '../navigation/DynamicTabNavigator'
 //导入组件跳转
 import NaivigationUtil from '../navigation/NaivigationUtil'
 
-export default class HomePage extends Component<Props> {
+import { connect } from 'react-redux'
+
+//处理安卓中的物理返回键
+import { BackHandler } from 'react-native'
+import { NavigationActions } from 'react-navigation'
+
+class HomePage extends Component<Props> {
+
+    componentDidMount (){
+        BackHandler.addEventListener("hardwareBackPress",this.onBackPress)
+    }
+
+    componentWillUnmount(){
+        BackHandler.removeEventListener("hardwareBackPress",this.onBackPress)
+    }
+
+    /**
+     * 处理安卓中的物理返回键
+     */
+    onBackPress = () => {
+        const { dispatch,nav } = this.props;
+        if(nav.routes[1].index === 0) {  //这里routes的下标不是0 ,是因为RootNaviagtor里面的Main是第二个
+            //不处理物理返回键
+            return false;
+        }
+        //处理物理返回键
+        dispatch(NavigationActions.back())
+        return true //这里返回true则系统不会处理了,由上面我们自己处理
+    }
 
     render() {
         NaivigationUtil.navigation = this.props.navigation;
@@ -28,4 +42,13 @@ export default class HomePage extends Component<Props> {
         );
     }
 }
+
+const mapStateToProps = state => ({
+    nav: state.nav
+})
+
+export default connect(mapStateToProps)(HomePage)
+
+
+
 
