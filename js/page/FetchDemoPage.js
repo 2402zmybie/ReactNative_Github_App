@@ -44,7 +44,6 @@ export default class FetchDemoPage extends Component<Props> {
             })
 
         }
-    }
 
     render() {
         return (
