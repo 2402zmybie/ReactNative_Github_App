@@ -56,10 +56,14 @@ class PopularTab extends Component<Props> {
                 <Text onPress={() => {
                     NaivigationUtil.goPage("FetchDemoPage")
                 }}>Fetch Demo</Text>
-
                 <Text onPress={() => {
                     NaivigationUtil.goPage("AsyncStorageDemoPage")
                 }}>AsyncStorage Demo</Text>
+
+                <Text onPress={() => {
+                    NaivigationUtil.goPage("DataStoreDemoPage")
+                }}>离线缓存框架</Text>
+
             </View>
         )
     }

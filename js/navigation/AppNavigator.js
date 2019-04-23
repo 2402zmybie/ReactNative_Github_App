@@ -5,6 +5,7 @@ import HomePage from '../page/HomePage'
 import DetailPage from '../page/DetailPage'
 import FetchDemoPage from '../page/FetchDemoPage'
 import AsyncStorageDemoPage from '../page/AsyncStorageDemoPage'
+import DataStoreDemoPage from '../page/DataStoreDemoPage'
 //引入react-redux
 import { connect } from 'react-redux'
 import {
@@ -44,6 +45,12 @@ const Main = createStackNavigator({
         screen: AsyncStorageDemoPage,
         navigationOptions: {
             header: null
+        }
+    },
+    DataStoreDemoPage: {
+        screen:DataStoreDemoPage,
+        navigationOptions: {
+            header:null
         }
     }
 })
