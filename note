@@ -50,3 +50,32 @@ npm i --save react-navigation-redux-helpers@2.0.9
 npm i redux@4.0.1
 npm i react-redux@5.1.0
 npm i redux-thunk@2.3.0
+
+fetch:
+            fetch(url)
+            .then(resp => {
+                if(resp.ok) {
+                    return resp.text()
+                }
+                throw new Error('network is not fine')
+            })
+            .then(response => {
+                this.setState({
+                    text: response
+                })
+            })
+            .catch(e => {
+                this.setState({
+                    text: e.toString()
+                })
+            })
+
+        }
+fetch在请求url的时候还有第二个参数 Object对象
+
+
+AsyncStorage:
+简单异步持久化的key-value存储系统,官方推荐的数据存储方式
+用法: setItem  getItem  reamoveItem  第二个参数调用,或者直接使用Promise的形式
+
+
