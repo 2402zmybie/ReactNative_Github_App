@@ -10,7 +10,6 @@ import DataStoreDemoPage from '../page/DataStoreDemoPage'
 import { connect } from 'react-redux'
 import {
     createReactNavigationReduxMiddleware,
-    createNavigationReducer,
     reduxifyNavigator
 } from 'react-navigation-redux-helpers'
 //设置根路由
