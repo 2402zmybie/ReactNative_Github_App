@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View,FlatList,RefreshControl} from 'react-native';
+import {Platform, StyleSheet, Text, View,FlatList,RefreshControl,ActivityIndicator} from 'react-native';
 import PopularItem from '../common/PopularItem'
 
 import {createMaterialTopTabNavigator} from 'react-navigation'
+import Toast from 'react-native-easy-toast'
 
 //引入connect
 import { connect } from 'react-redux'
@@ -15,6 +16,7 @@ const THEME_COLOR = 'red'
 export default class PopularPage extends Component<Props> {
     constructor(props) {
         super(props)
+        console.disableYellowBox = true
         this.tabNames = ['Java','Android','Ios','React','React Native','PHP']
     }
 
@@ -50,6 +52,7 @@ export default class PopularPage extends Component<Props> {
     }
 }
 
+const pageSize = 10;
 //PopolarTab让其进行绑定
 class PopularTab extends Component<Props> {
     constructor(props) {
@@ -60,9 +63,38 @@ class PopularTab extends Component<Props> {
     componentDidMount() {
         this.loadData();
     }
-    loadData() {
+
+    /**
+     * 获取与当前页面有关的数据
+     * @private
+     */
+    _store() {
+        const {popular} = this.props
+        let store = popular[this.storeName]
+        if(!store) {
+            store = {
+                items:[],
+                isLoading:false,
+                projectModes:[],  //要显示的数据
+                hideLoadingMore:true,   //默认隐藏加载更多
+            }
+        }
+        return store;
+    }
+
+    loadData(loadMore) {
+        const {onLoadPopularData,onLoadMorePopular} = this.props;
+        const store = this._store();
         const url = this.genFetchUrl(this.storeName);
-        this.props.onLoadPopularData(this.storeName,url)
+        //判断是下拉刷新还是加载更多
+        if(loadMore) {
+            onLoadMorePopular(this.storeName,++store.pageIndex,pageSize,store.items,callBack=> {
+                this.refs.toast.show('没有更多了')
+            })
+        }else {
+            onLoadPopularData(this.storeName,url,pageSize)
+        }
+
     }
     genFetchUrl(key) {
         return URL + key + QUERY_STR;
@@ -77,19 +109,20 @@ class PopularTab extends Component<Props> {
         />
     }
 
+    genIndicator() {
+        return this._store().hideLoadingMore? null :
+            <View style={styles.indicatorContainer}>
+                <ActivityIndicator style={styles.indicator}/>
+                <Text>正在加载更多</Text>
+            </View>
+    }
+
     render() {
-        const {popular} = this.props;
-        let store = popular[this.storeName]  //动态获取state
-        if(!store) {
-            store = {
-                items: [],
-                isLoading: false
-            }
-        }
+        let store = this._store()
         return (
             <View>
                 <FlatList
-                    data={store.items}
+                    data={store.projectModes}
                     renderItem={data => this.renderItem(data)}
                     keyExtractor={item => item.id + ''}
                     refreshControl={
@@ -102,7 +135,23 @@ class PopularTab extends Component<Props> {
                             tintColor={THEME_COLOR}
                         />
                     }
+                    ListFooterComponent={() => this.genIndicator()}
+                    //解决初始进去会调用onEndReached和滑动一次会调用两次onEndReached的问题, 为什么要使用一个定时器,确保在onEndReached执行的时候onMomentumScrollBegin先执行
+                    onEndReached={() => {
+                        console.log('------------onEndReached--------------')
+                        setTimeout(() => {
+                            if(this.canLoadMore) {
+                                this.loadData(true)
+                                this.canLoadMore = false;
+                            }
+                        },100)
+                    }}
+                    onMomentumScrollBegin={() => {  //初始化滚动的时候调用onEndReached
+                        this.canLoadMore = true;
+                    }}
+                    onEndReachedThreshold={0.5}
                 />
+                <Toast ref={'toast'} position={'center'}/>
             </View>
         )
     }
@@ -111,7 +160,8 @@ const mapStateToProps = state => ({
     popular: state.popular
 })
 const mapDispatchToProps = dispatch => ({
-    onLoadPopularData: (storeName,url) => dispatch(actions.onLoadPopularData(storeName,url))
+    onLoadPopularData: (storeName,url,pageSize) => dispatch(actions.onLoadPopularData(storeName,url,pageSize)),
+    onLoadMorePopular: (storeName,pageIndex,pageSize,items,callBack) => dispatch(actions.onLoadMorePopular(storeName,pageIndex,pageSize,items,callBack))
 })
 const PopularTabPage = connect(mapStateToProps,mapDispatchToProps)(PopularTab);
 
@@ -129,6 +179,13 @@ const styles = StyleSheet.create({
         fontSize:13,
         marginTop:6,
         marginBottom:6
+    },
+    indicatorContainer: {
+        alignItems:'center'
+    },
+    indicator: {
+        color:'red',
+        margin:10
     }
 })
 
