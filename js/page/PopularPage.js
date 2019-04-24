@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View,FlatList,RefreshControl} from 'react-native';
+import PopularItem from '../common/PopularItem'
 
 import {createMaterialTopTabNavigator} from 'react-navigation'
 
@@ -68,9 +69,12 @@ class PopularTab extends Component<Props> {
     }
     renderItem(data) {
         const item = data.item;
-        return <View style={{marginBottom: 10}}>
-                <Text style={{backgroundColor:'#faa'}}>{JSON.stringify(item)}</Text>
-        </View>
+        return <PopularItem
+                item = {item}
+                onSelect={() => {
+                    console.warn('条目被点击了')
+                }}
+        />
     }
 
     render() {

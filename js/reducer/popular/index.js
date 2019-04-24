@@ -25,7 +25,7 @@ export default (state = defaultState,action) => {
                 ...state,
                 [action.storeName]:{
                     //表示整个tab下面的数据
-                    ...[action.storeName],
+                    ...state[action.storeName],
                     items:action.items,
                     isLoading:false
                 }
@@ -34,7 +34,7 @@ export default (state = defaultState,action) => {
             return {
                 ...state,
                 [action.storeName]: {
-                    ...[action.storeName],
+                    ...state[action.storeName],
                     isLoading:true
                 }
             }
@@ -42,7 +42,7 @@ export default (state = defaultState,action) => {
             return {
                 ...state,
                 [action.storeName]: {
-                    ...[action.storeName],
+                    ...state[action.storeName],
                     isLoading:false
                 }
             }
