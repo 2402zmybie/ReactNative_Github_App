@@ -109,3 +109,18 @@ reducer里面是纯函数,逻辑比较简单
 
 
 
+趋势页面开发:
+学习知识:
+1 封装一个自定义的Navigation
+2 对DataStore进行扩展
+3 自定义一个Pop弹框
+4 事件通知  event-emit
+5 跨页面通信
+6 WebView实现详情页,和提取ViewUtil
+7 TabNavigator优化  进行模块开发
+8 封装BackPressConponent组件
+
+
+
+
+
