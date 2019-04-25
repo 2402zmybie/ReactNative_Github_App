@@ -2,14 +2,21 @@ import Types from '../types'
 import DataStore, {FLAG_STORAGE} from '../../expand/dao/DataStore'
 import {handleData} from "../ActionUtil";
 
-export function onLoadPopularData(storeName,url,pageSize) {
+/**
+ * 获取趋势模块数据的异步action
+ * @param storeName
+ * @param url
+ * @param pageSize
+ * @returns {Function}
+ */
+export function onRefreshTrending(storeName,url,pageSize) {
     return dispatch => {
-        dispatch({type : Types.POPULAR_REFRESH, storeName: storeName})
+        dispatch({type : Types.TRENDING_REFRESH, storeName: storeName})
         let dataStore = new DataStore();
-        dataStore.fetchData(url,FLAG_STORAGE.flag_popular)
+        dataStore.fetchData(url,FLAG_STORAGE.flag_trending)
             //请求成功
             .then(data => {
-                handleData(Types.LOAD_POPULAR_SUCCESS,dispatch, storeName,data,pageSize);
+                handleData(Types.TRENDING_REFRESH_SUCCESS,dispatch, storeName,data,pageSize);
             })
             //请求失败
             .catch(error => {
@@ -31,7 +38,7 @@ export function onLoadPopularData(storeName,url,pageSize) {
  * @param dataArray 原始数据
  * @param callback  回调函数,可以通过回调函数向页面通信,比如异常信息的展示,没有更多等待等
  */
-export function onLoadMorePopular(storeName,pageIndex,pageSize,dataArray=[],callBack) {
+export function onLoadMoreTrending(storeName,pageIndex,pageSize,dataArray=[],callBack) {
     return dispatch => {
         setTimeout(() => {
             //模拟网络请求
@@ -40,7 +47,7 @@ export function onLoadMorePopular(storeName,pageIndex,pageSize,dataArray=[],call
                     callBack('no more')
                 }
                 dispatch({
-                    type:Types.POPULAR_LOAD_MORE_FAIL,
+                    type:Types.TRENDING_LOAD_MORE_FAIL,
                     error: 'no more',
                     storeName: storeName,
                     pageIndex: --pageIndex,
@@ -50,7 +57,7 @@ export function onLoadMorePopular(storeName,pageIndex,pageSize,dataArray=[],call
                 //本次载入的最大数量
                 let max = pageSize * pageIndex > dataArray.length ? dataArray.length : pageSize * pageIndex
                 dispatch({
-                    type: Types.POPULAR_LOAD_MORE_SUCCESS,
+                    type: Types.TRENDING_LOAD_MORE_SUCCESS,
                     storeName,
                     pageIndex,
                     projectModes: dataArray.slice(0,max)

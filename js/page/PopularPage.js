@@ -52,7 +52,8 @@ export default class PopularPage extends Component<Props> {
                 scrollEnabled:true,
                 upperCaseLabel:false,
                 style: {
-                    backgroundColor:'#678'
+                    backgroundColor:'#678',
+                    height: 30
                 },
                 indicatorStyle:styles.indicatorStyle,
                 labelStyle:styles.labelStyle
@@ -182,7 +183,8 @@ const PopularTabPage = connect(mapStateToProps,mapDispatchToProps)(PopularTab);
 
 const styles = StyleSheet.create({
     tabStyle: {
-        minWidth:50
+        // minWidth:50  minWidth和scrollEnable会导致tabStyle初次加载时候闪烁
+        padding:0
     },
     indicatorStyle: {
         height:2,
@@ -190,8 +192,7 @@ const styles = StyleSheet.create({
     },
     labelStyle: {
         fontSize:13,
-        marginTop:6,
-        marginBottom:6
+        margin: 0
     },
     indicatorContainer: {
         alignItems:'center'
