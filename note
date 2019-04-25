@@ -120,6 +120,13 @@ reducer里面是纯函数,逻辑比较简单
 7 TabNavigator优化  进行模块开发
 8 封装BackPressConponent组件
 
+1 如何自定义组件:
+    第一步:继承React.Component
+    实现render方法
+    对属性进行类型检查
+    设置默认属性
+
+
 
 
 

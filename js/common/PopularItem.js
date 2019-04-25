@@ -8,7 +8,7 @@ export default class PopularItem extends Component {
         const {item} = this.props;
         if (!item || !item.owner) return null;
         //定义一个可以收藏的按钮
-        let FavoriteButton = <TouchableOpacity style={{padding: 6}} onPress={() => {}} underlayColor={'transparent'}>
+        let FavoriteButton = <TouchableOpacity style={{padding: 6}}  underlayColor={'transparent'}>
                                 <FontAwesome name={'star-o'} size={26} style={{color:'red'}}/>
                             </TouchableOpacity>
         return (
@@ -25,7 +25,7 @@ export default class PopularItem extends Component {
                             />
                         </View>
                         <View style={styles.row}>
-                            <Text>Start:</Text>
+                            <Text>Star:</Text>
                             <Text>{item.stargazers_count}</Text>
                         </View>
                         {FavoriteButton}

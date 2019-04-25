@@ -4,14 +4,15 @@ import PopularItem from '../common/PopularItem'
 
 import {createMaterialTopTabNavigator} from 'react-navigation'
 import Toast from 'react-native-easy-toast'
-
+// 使用自定义的NavigationBar
+import NavigationBar from '../common/NavigationBar'
 //引入connect
 import { connect } from 'react-redux'
 import actions from '../action'
 
 const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars'
-const THEME_COLOR = 'red'
+const THEME_COLOR = '#678'
 
 export default class PopularPage extends Component<Props> {
     constructor(props) {
@@ -36,6 +37,15 @@ export default class PopularPage extends Component<Props> {
 
 
     render() {
+        let statusBar = {
+            backgroundColor: THEME_COLOR,
+            barStyle:'light-content'
+        }
+        let navigationBar = <NavigationBar
+            title={'最热'}
+            statusBar={statusBar}
+            style={{backgroundColor: THEME_COLOR}}
+        />
         const TopTab = createMaterialTopTabNavigator(this._genTabs(),{
             tabBarOptions: {
                 tabStyle:styles.tabStyle,
@@ -48,7 +58,10 @@ export default class PopularPage extends Component<Props> {
                 labelStyle:styles.labelStyle
             }
         })
-        return <TopTab/>
+        return <View style={{flex:1}}>
+            {navigationBar}
+            <TopTab/>
+        </View>
     }
 }
 
