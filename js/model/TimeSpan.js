@@ -1,4 +1,6 @@
 /**
+ *
+ * 在js里面实现 类似于java的 mo
  * Trending搜索时间跨度mo
  * @param showText
  * @param searchText

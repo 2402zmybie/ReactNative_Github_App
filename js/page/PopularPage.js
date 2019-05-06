@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View,FlatList,RefreshControl,ActivityIndicator} from 'react-native';
+import {Platform, StyleSheet, Text, View,FlatList,RefreshControl,ActivityIndicator,DeviceInfo} from 'react-native';
 import PopularItem from '../common/PopularItem'
 
 import {createMaterialTopTabNavigator} from 'react-navigation'
@@ -59,7 +59,8 @@ export default class PopularPage extends Component<Props> {
                 labelStyle:styles.labelStyle
             }
         })
-        return <View style={{flex:1}}>
+        //判断是否运行在iphone x上面
+        return <View style={{flex:1, marginTop: DeviceInfo.isIPhoneX_deprecated? 30 : 0}}>
             {navigationBar}
             <TopTab/>
         </View>

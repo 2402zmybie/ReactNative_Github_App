@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
         justifyContent:'space-between',
         height: Platform.OS === 'ios'? NAV_BAR_HEIGHT_IOS : NAV_BAT_HEIGHT_ANDROID
     },
+    //title容器的布局, 左右各留40  且居中
     navBarTitleContainer: {
         alignItems:'center',
         justifyContent: 'center',
