@@ -4,11 +4,13 @@
 export default class NaivigationUtil {
 
 
-    static goPage(page) {
-
+    static goPage(params,page) {
         const navigation = NaivigationUtil.navigation;
         navigation.navigate(
-            page
+            page,
+            {
+                ...params
+            }
         )
     }
 

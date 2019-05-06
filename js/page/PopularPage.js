@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View,FlatList,RefreshControl,ActivityIndicator,DeviceInfo} from 'react-native';
 import PopularItem from '../common/PopularItem'
+import NavigationUtil from '../navigation/NaivigationUtil'
 
 import {createMaterialTopTabNavigator} from 'react-navigation'
 import Toast from 'react-native-easy-toast'
@@ -119,7 +120,9 @@ class PopularTab extends Component<Props> {
         return <PopularItem
                 item = {item}
                 onSelect={() => {
-                    console.warn('条目被点击了')
+                    NavigationUtil.goPage({
+                        projectModel: item
+                    },'DetailPage')
                 }}
         />
     }

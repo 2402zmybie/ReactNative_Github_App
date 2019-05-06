@@ -5,14 +5,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 export default class PopularItem extends Component {
 
     render() {
-        const {item} = this.props;
+        const {item,onSelect} = this.props;
         if (!item || !item.owner) return null;
         //定义一个可以收藏的按钮
         let FavoriteButton = <TouchableOpacity style={{padding: 6}}  underlayColor={'transparent'}>
                                 <FontAwesome name={'star-o'} size={26} style={{color:'red'}}/>
                             </TouchableOpacity>
         return (
-            <TouchableNativeFeedback>
+            <TouchableNativeFeedback onPress={onSelect}>
                 <View style={styles.cell_container}>
                     <Text style={styles.title}>{item.full_name}</Text>
                     <Text style={styles.description}>{item.description}</Text>

@@ -16,6 +16,7 @@ const QUERY_STR = '&sort=stars'
 const THEME_COLOR = '#678'
 //引入Modal
 import TrendingDialog,{TimeSpans} from '../common/TrendingDialog'
+import NavigationUtil from "../navigation/NaivigationUtil";
 const EVENT_TYPE_TIME_SPAN_CHANGE = 'EVENT_TYPE_TIME_SPAN_CHANGE'
 
 export default class TrendingPage extends Component<Props> {
@@ -183,7 +184,9 @@ class TrendingTab extends Component<Props> {
         return <TrendingItem
             item = {item}
             onSelect={() => {
-                console.warn('条目被点击了')
+                NavigationUtil.goPage({
+                    projectModel: item
+                },'DetailPage')
             }}
         />
     }

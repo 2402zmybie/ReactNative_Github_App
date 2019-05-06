@@ -10,15 +10,20 @@ import { connect } from 'react-redux'
 //处理安卓中的物理返回键
 import { BackHandler } from 'react-native'
 import { NavigationActions } from 'react-navigation'
+import BackPressComponent from "../common/BackPressComponent";
 
 class HomePage extends Component<Props> {
-
+    constructor(props) {
+        super(props)
+        //实例化安卓物理返回键公共类方法, 并向其传递一个backPress
+        this.backPress = new BackPressComponent({backPress: this.onBackPress()})
+    }
     componentDidMount (){
-        BackHandler.addEventListener("hardwareBackPress",this.onBackPress)
+        this.backPress.componentDidMount()
     }
 
     componentWillUnmount(){
-        BackHandler.removeEventListener("hardwareBackPress",this.onBackPress)
+        this.backPress.componentWillUnmount()
     }
 
     /**

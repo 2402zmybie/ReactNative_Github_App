@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Platform, StyleSheet, Text, View,TouchableOpacity} from 'react-native';
+import {Text, View,TouchableOpacity} from 'react-native';
 import NaivigationUtil from "../navigation/NaivigationUtil";
 import Feather from 'react-native-vector-icons/Feather'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -48,17 +48,17 @@ export default class MyPage extends Component<Props> {
                     style={{backgroundColor: THEME_COLOR}}
                 />
                 <Text onPress={() => {
-                    NaivigationUtil.goPage("DetailPage")
+                    NaivigationUtil.goPage({},"DetailPage")
                 }}>跳转到详情页</Text>
                 <Text onPress={() => {
-                    NaivigationUtil.goPage("FetchDemoPage")
+                    NaivigationUtil.goPage({},"FetchDemoPage")
                 }}>Fetch Demo</Text>
                 <Text onPress={() => {
-                    NaivigationUtil.goPage("AsyncStorageDemoPage")
+                    NaivigationUtil.goPage({},"AsyncStorageDemoPage")
                 }}>AsyncStorage Demo</Text>
 
                 <Text onPress={() => {
-                    NaivigationUtil.goPage("DataStoreDemoPage")
+                    NaivigationUtil.goPage({},"DataStoreDemoPage")
                 }}>离线缓存框架</Text>
             </View>
         );

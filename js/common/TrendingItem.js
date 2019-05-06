@@ -7,7 +7,7 @@ import HTMLView from 'react-native-htmlview'
 export default class TrendingItem extends Component {
 
     render() {
-        const {item} = this.props;
+        const {item,onSelect} = this.props;
         if (!item) return null;
         //定义一个可以收藏的按钮
         let FavoriteButton = <TouchableOpacity style={{padding: 6}}  underlayColor={'transparent'}>
@@ -15,7 +15,7 @@ export default class TrendingItem extends Component {
                             </TouchableOpacity>
         let description = '<p>' + item.description + '</p>'
         return (
-            <TouchableNativeFeedback>
+            <TouchableNativeFeedback onPress={onSelect}>
                 <View style={styles.cell_container}>
                     <Text style={styles.title}>{item.fullName}</Text>
                     <HTMLView
