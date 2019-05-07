@@ -20,7 +20,7 @@ import Types from "./types";
  * @param favoriteDao
  * @param params 其他参数
  */
-export function handleData(actionType, dispatch, storeName, data, pageSize, favoriteDao,params) {
+export function handleData(actionType, dispatch, storeName, data, pageSize, favoriteDao) {
     let fixItems = [];
     if (data && data.data) {
         if (Array.isArray(data.data)) {
@@ -29,11 +29,36 @@ export function handleData(actionType, dispatch, storeName, data, pageSize, favo
             fixItems = data.data.items;
         }
     }
-    dispatch({
-        type: actionType,
-        projectModes: pageSize>fixItems.length?fixItems:fixItems.slice(0,pageSize),  //第一次要加载的数据
-        storeName,
-        items: fixItems,
-        pageIndex : 1
+    //第一次要加载的数据
+    let showItems = pageSize>fixItems.length?fixItems:fixItems.slice(0,pageSize);
+    _projectModels(showItems,favoriteDao,projectModes => {
+        dispatch({
+            type: actionType,
+            items: fixItems,
+            projectModes: projectModes,
+            storeName,
+            pageIndex : 1
+        })
     })
+
+}
+
+//将item包装成有收藏状态的集合
+export async function _projectModels(showItems, favoriteDao,callback) {
+    let keys = [];
+    try {
+        //由于返回的是一个promise对象  所以异步转同步
+        //获取收藏的key
+        keys = await favoriteDao.getFavoriteKeys();
+    }catch (e) {
+        console.log(e)
+    }
+    let projectModels = [];
+    for(let i = 0,len = showItems.length; i<len; i++) {
+        projectModels.push(new ProjectModel(showItems[i],Utils.checkFavorite(showItems[i],keys)))
+    }
+    //将结果通过callback回传回去
+    if(typeof callback === 'function') {
+        callback(projectModels)
+    }
 }

@@ -3,19 +3,17 @@ import {Platform, StyleSheet, Text, View, TouchableNativeFeedback,TouchableOpaci
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 //导入显示html标签的库
 import HTMLView from 'react-native-htmlview'
+import BaseItem from "./BaseItem";
 
-export default class TrendingItem extends Component {
+export default class TrendingItem extends BaseItem {
 
     render() {
-        const {item,onSelect} = this.props;
+        const { projectModel } = this.props;
+        const { item } = projectModel;
         if (!item) return null;
-        //定义一个可以收藏的按钮
-        let FavoriteButton = <TouchableOpacity style={{padding: 6}}  underlayColor={'transparent'}>
-                                <FontAwesome name={'star-o'} size={26} style={{color:'red'}}/>
-                            </TouchableOpacity>
         let description = '<p>' + item.description + '</p>'
         return (
-            <TouchableNativeFeedback onPress={onSelect}>
+            <TouchableNativeFeedback onPress={this.props.onSelect}>
                 <View style={styles.cell_container}>
                     <Text style={styles.title}>{item.fullName}</Text>
                     <HTMLView
@@ -41,7 +39,7 @@ export default class TrendingItem extends Component {
                             })}
 
                         </View>
-                        {FavoriteButton}
+                        {this._favoriteIcon()}
                     </View>
                 </View>
             </TouchableNativeFeedback>

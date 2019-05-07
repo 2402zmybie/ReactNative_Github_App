@@ -1,18 +1,16 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, TouchableNativeFeedback,TouchableOpacity,Image} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import BaseItem from "./BaseItem";
 
-export default class PopularItem extends Component {
+export default class PopularItem extends BaseItem {
 
     render() {
-        const {item,onSelect} = this.props;
+        const { projectModel } = this.props;
+        const { item } = projectModel
         if (!item || !item.owner) return null;
-        //定义一个可以收藏的按钮
-        let FavoriteButton = <TouchableOpacity style={{padding: 6}}  underlayColor={'transparent'}>
-                                <FontAwesome name={'star-o'} size={26} style={{color:'red'}}/>
-                            </TouchableOpacity>
         return (
-            <TouchableNativeFeedback onPress={onSelect}>
+            <TouchableNativeFeedback onPress={this.props.onSelect}>
                 <View style={styles.cell_container}>
                     <Text style={styles.title}>{item.full_name}</Text>
                     <Text style={styles.description}>{item.description}</Text>
@@ -28,7 +26,7 @@ export default class PopularItem extends Component {
                             <Text>Star:</Text>
                             <Text>{item.stargazers_count}</Text>
                         </View>
-                        {FavoriteButton}
+                        {this._favoriteIcon()}
                     </View>
                 </View>
             </TouchableNativeFeedback>

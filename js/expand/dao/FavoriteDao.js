@@ -4,6 +4,7 @@ import {
 const FAVORITE_KEY_PREFIX = 'favorite_';
 export default class FavoriteDao {
     constructor(flag) {
+        //favoriteKey有两种, 一个是最热的 一个是趋势的; favoriteKey对应的值 存的是数组序列化的json串
         this.favoriteKey = FAVORITE_KEY_PREFIX + flag;
     }
     /**
@@ -42,7 +43,7 @@ export default class FavoriteDao {
         });
     }
     /**
-     * 获取收藏的Repository对应的key
+     * 获取收藏的Repository对应的key(为什么提供这个方法, 是因为显示的时候要刷新收藏的状态)
      * @return {Promise}
      */
     getFavoriteKeys() {
@@ -72,7 +73,7 @@ export default class FavoriteDao {
         });
     }
     /**
-     * 获取所以收藏的项目
+     * 获取所有收藏的项目(包括最热和趋势两个界面下面的)
      * @return {Promise}
      */
     getAllItems() {

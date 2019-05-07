@@ -129,5 +129,11 @@ reducer里面是纯函数,逻辑比较简单
 
 
 
+收藏模块:
+如何封装FavoriteDao以及多数据存储设计思想
+如何使用最新的React的static-lifecycle-methods?
+如何封装与继承BaseItem实现代码复用
+如何妙用callback解决Item跨组件更新问题
+跨界面通信解决方案EventBus的原理与使用介绍
 
 
