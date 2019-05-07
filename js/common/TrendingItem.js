@@ -13,7 +13,7 @@ export default class TrendingItem extends BaseItem {
         if (!item) return null;
         let description = '<p>' + item.description + '</p>'
         return (
-            <TouchableNativeFeedback onPress={this.props.onSelect}>
+            <TouchableNativeFeedback onPress={() => this.onItemClick()}>
                 <View style={styles.cell_container}>
                     <Text style={styles.title}>{item.fullName}</Text>
                     <HTMLView

@@ -35,6 +35,13 @@ export default class BaseItem extends Component {
             isFavorite: isFavorite
         })
     }
+    //当用户点击item的时候, 我们希望onItemClick会被执行,调用this.props.onSelect.
+    //将isFavorite传递过去,是个callback.当回调的时候会及时改变isFavorite的状态
+    onItemClick() {
+        this.props.onSelect(isFavorite => {
+            this.setFavoriteState(isFavorite)
+        })
+    }
     onPressFavorite() {
         this.setFavoriteState(!this.state.isFavorite)
         //将item和收藏状态回调给具体的page

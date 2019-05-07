@@ -188,9 +188,12 @@ class TrendingTab extends Component<Props> {
         const item = data.item;
         return <TrendingItem
             projectModel = {item}
-            onSelect={() => {
+            //条目点击跳转,callback作为桥梁方法被传递到详情页
+            onSelect={(callback) => {
                 NavigationUtil.goPage({
-                    projectModel: item
+                    projectModel: item,
+                    flag: FLAG_STORAGE.flag_trending,
+                    callback
                 },'DetailPage')
             }}
             onFavorite={(item,isFavorite) => FavoriteUtil.onFavorite(favoriteDao,item,isFavorite, FLAG_STORAGE.flag_trending)}

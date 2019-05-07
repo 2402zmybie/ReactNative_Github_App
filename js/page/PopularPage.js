@@ -124,9 +124,11 @@ class PopularTab extends Component<Props> {
         const item = data.item;
         return <PopularItem
                 projectModel = {item}
-                onSelect={() => {
+                onSelect={(callback) => {
                     NavigationUtil.goPage({
-                        projectModel: item
+                        projectModel: item,
+                        flag: FLAG_STORAGE.flag_popular,
+                        callback
                     },'DetailPage')
                 }}
                 //当用户点击收藏按钮的回调的时候
