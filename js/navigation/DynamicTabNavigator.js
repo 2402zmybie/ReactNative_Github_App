@@ -20,6 +20,8 @@ import NaivigationUtil from '../navigation/NaivigationUtil'
 import { BottomTabBar } from 'react-navigation-tabs'
 //导入react-redux
 import { connect } from 'react-redux'
+import EventBus from 'react-native-event-bus'
+import EventTypes from "../util/EventTypes";
 
 const TABS = {
     PopularPage: {
@@ -97,7 +99,16 @@ class DynamicTabNavigator extends Component<Props> {
     render() {
         const Tab = this._tabNavigator();
         return (
-            <Tab />
+            <Tab
+                // 底部tab切换的时候会回调这个方法
+                onNavigationStateChange={(prevState, newState,action) => {
+                    //发送底部tab切换的事件
+                    EventBus.getInstance().fireEvent(EventTypes.bottom_tab_select,{
+                        from:prevState.index,
+                        to:newState.index
+                    })
+                }}
+            />
         );
     }
 }

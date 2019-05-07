@@ -62,3 +62,18 @@ export function onLoadMorePopular(storeName,pageIndex,pageSize,dataArray=[],favo
         },500);
     }
 }
+
+export function onFlushPopularFavorite(storeName,pageIndex,pageSize,dataArray=[],favoriteDao) {
+    return dispatch => {
+        //本次载入的最大数量
+        let max = pageSize * pageIndex > dataArray.length ? dataArray.length : pageSize * pageIndex
+        _projectModels(dataArray.slice(0,max),favoriteDao,projectModels => {
+            dispatch({
+                type: Types.FLUSH_POPULAR_FAVORITE,
+                storeName,
+                pageIndex,
+                projectModes: projectModels
+            })
+        })
+    }
+}

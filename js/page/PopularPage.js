@@ -5,6 +5,7 @@ import NavigationUtil from '../navigation/NaivigationUtil'
 
 import {createMaterialTopTabNavigator} from 'react-navigation'
 import Toast from 'react-native-easy-toast'
+import EventBus from 'react-native-event-bus'
 // 使用自定义的NavigationBar
 import NavigationBar from '../common/NavigationBar'
 //引入connect
@@ -13,6 +14,7 @@ import actions from '../action'
 import FavoriteDao from "../expand/dao/FavoriteDao";
 import {FLAG_STORAGE} from "../expand/dao/DataStore";
 import FavoriteUtil from "../util/FavoriteUtil";
+import EventTypes from "../util/EventTypes";
 
 const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars'
@@ -80,10 +82,27 @@ class PopularTab extends Component<Props> {
         super(props)
         const { tabLabel } = this.props;
         this.storeName = tabLabel;
+        this.isFavoriteChanged = false
     }
+
     componentDidMount() {
         this.loadData();
+        //两个监听   1收藏模块最热中item收藏发生变化的监听 2底部tab切换
+        EventBus.getInstance().addListener(EventTypes.favorite_change_popular,this.favoriteChangeListener = () => {
+            this.isFavoriteChanged = true
+        })
+        EventBus.getInstance().addListener(EventTypes.bottom_tab_select,this.bottomTabSelectListener = data => {
+            if(data.to === 0 && this.isFavoriteChanged) {
+                this.loadData(null,true)
+            }
+        })
+
     }
+    componentWillUnmount(): void {
+        EventBus.getInstance().removeListener(this.favoriteChangeListener)
+        EventBus.getInstance().removeListener(this.bottomTabSelectListener)
+    }
+
 
     /**
      * 获取与当前页面有关的数据
@@ -103,8 +122,8 @@ class PopularTab extends Component<Props> {
         return store;
     }
 
-    loadData(loadMore) {
-        const {onLoadPopularData,onLoadMorePopular} = this.props;
+    loadData(loadMore,refreshFavorite) {
+        const {onLoadPopularData,onLoadMorePopular,onFlushPopularFavorite} = this.props;
         const store = this._store();
         const url = this.genFetchUrl(this.storeName);
         //判断是下拉刷新还是加载更多
@@ -112,7 +131,10 @@ class PopularTab extends Component<Props> {
             onLoadMorePopular(this.storeName,++store.pageIndex,pageSize,store.items,favoriteDao,callBack=> {
                 this.refs.toast.show('没有更多了')
             })
-        }else {
+        }else if(refreshFavorite) {
+            onFlushPopularFavorite(this.storeName, store.pageIndex, pageSize, store.items, favoriteDao)
+        }
+        else {
             onLoadPopularData(this.storeName,url,pageSize,favoriteDao)
         }
 
@@ -188,7 +210,8 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
     onLoadPopularData: (storeName,url,pageSize,favoriteDao) => dispatch(actions.onLoadPopularData(storeName,url,pageSize,favoriteDao)),
-    onLoadMorePopular: (storeName,pageIndex,pageSize,items,favoriteDao,callBack) => dispatch(actions.onLoadMorePopular(storeName,pageIndex,pageSize,items,favoriteDao,callBack))
+    onLoadMorePopular: (storeName,pageIndex,pageSize,items,favoriteDao,callBack) => dispatch(actions.onLoadMorePopular(storeName,pageIndex,pageSize,items,favoriteDao,callBack)),
+    onFlushPopularFavorite: (storeName,pageIndex,pageSize,items,favoriteDao) => dispatch(actions.onFlushPopularFavorite(storeName,pageIndex,pageSize,items,favoriteDao))
 })
 const PopularTabPage = connect(mapStateToProps,mapDispatchToProps)(PopularTab);
 
