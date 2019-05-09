@@ -6,36 +6,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 //导入NavigationBar
 import NavigationBar from '../common/NavigationBar'
 import {MORE_MENU} from "../common/MORE_MENU";
-import GlobalStyles from "../res/GlobalStyles";
+import GlobalStyles from "../res/style/GlobalStyles";
 import ViewUtil from "../util/ViewUtil";
-import NavigationTestUtils from "react-navigation/NavigationTestUtils";
 const THEME_COLOR = '#678'
 
 export default class MyPage extends Component<Props> {
-    //右侧按钮
-    getRightButton() {
-        return <View style={{flexDirection:'row'}}>
-            <TouchableOpacity>
-                <View style={{padding: 5,marginRight:8}}>
-                    <Feather
-                        name={'search'}
-                        size={24}
-                        style={{color:'white'}}
-                    />
-                </View>
-            </TouchableOpacity>
-        </View>
-    }
-    //左侧按钮
-    getLeftButton(callBack) {
-        return <TouchableOpacity style={{padding: 8,marginLeft:12}}>
-            <Ionicons
-                name={'ios-arrow-back'}
-                size={26}
-                style={{color: 'white'}}
-            />
-        </TouchableOpacity>
-    }
+
     onClick(menu) {
         let RouteName, params = {};
         switch (menu) {
@@ -43,6 +19,12 @@ export default class MyPage extends Component<Props> {
                 RouteName = 'WebViewPage';
                 params.title='教程';
                 params.url = 'https://coding.m.imooc.com/classindex.html?cid=89'
+                break;
+            case MORE_MENU.About:
+                RouteName = 'AboutPage';
+                break
+            case MORE_MENU.About_Author:
+                RouteName = 'AboutMePage';
                 break
         }
         if(RouteName) {
@@ -62,8 +44,9 @@ export default class MyPage extends Component<Props> {
         let navigationBar = <NavigationBar
             title={'我的'}
             statusBar={statusBar}
-            rightButton={this.getRightButton()}
-            leftButton={this.getLeftButton()}
+            leftButton={ViewUtil.getLeftBackButton(() => {
+                NaivigationUtil.goBack(this.props.navigation)
+            })}
             style={{backgroundColor: THEME_COLOR}}
         />
         return (
@@ -80,7 +63,7 @@ export default class MyPage extends Component<Props> {
                                     color:THEME_COLOR
                                 }}
                             />
-                            <Text>{MORE_MENU.About.icon}</Text>
+                            <Text>{MORE_MENU.About.name}</Text>
                         </View>
                         <Ionicons
                             name={'ios-arrow-forward'}
