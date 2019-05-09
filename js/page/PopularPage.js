@@ -15,6 +15,7 @@ import FavoriteDao from "../expand/dao/FavoriteDao";
 import {FLAG_STORAGE} from "../expand/dao/DataStore";
 import FavoriteUtil from "../util/FavoriteUtil";
 import EventTypes from "../util/EventTypes";
+import {FLAG_LANGUAGE} from "../expand/dao/LanguageDao";
 
 const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars'
@@ -22,21 +23,26 @@ const THEME_COLOR = '#678'
 //将favoriteDao实例化
 const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_popular)
 
-export default class PopularPage extends Component<Props> {
+class PopularPage extends Component<Props> {
     constructor(props) {
         super(props)
         console.disableYellowBox = true
-        this.tabNames = ['Java','Android','Ios','React','React Native','PHP']
+        //tabNames变成动态的
+        // this.tabNames = ['Java','Android','Ios','React','React Native','PHP']
+        const { onLoadLanguage } = this.props;
+        onLoadLanguage(FLAG_LANGUAGE.flag_key)
     }
 
     _genTabs() {
         const tabs = {};
-        this.tabNames.forEach((item,index) => {
-            //初始化顶部tab的时候 向页面传递参数
-            tabs[`tab${index}`] = {
-                screen: props => <PopularTabPage {...props} tabLabel={item}/>,
-                navigationOptions: {
-                    title:item
+        const { keys } = this.props;
+        keys.forEach((item,index) => {
+            if(item.checked) {
+                tabs[`tab${index}`] = {
+                    screen: props => <PopularTabPage {...props} tabLabel={item.name}/>,
+                    navigationOptions: {
+                        title:item.name
+                    }
                 }
             }
         })
@@ -45,6 +51,7 @@ export default class PopularPage extends Component<Props> {
 
 
     render() {
+        const {keys} = this.props
         let statusBar = {
             backgroundColor: THEME_COLOR,
             barStyle:'light-content'
@@ -54,7 +61,7 @@ export default class PopularPage extends Component<Props> {
             statusBar={statusBar}
             style={{backgroundColor: THEME_COLOR}}
         />
-        const TopTab = createMaterialTopTabNavigator(this._genTabs(),{
+        const TopTab = keys.length ? createMaterialTopTabNavigator(this._genTabs(),{
             tabBarOptions: {
                 tabStyle:styles.tabStyle,
                 scrollEnabled:true,
@@ -66,14 +73,26 @@ export default class PopularPage extends Component<Props> {
                 indicatorStyle:styles.indicatorStyle,
                 labelStyle:styles.labelStyle
             }
-        })
+        }): null
         //判断是否运行在iphone x上面
         return <View style={{flex:1, marginTop: DeviceInfo.isIPhoneX_deprecated? 30 : 0}}>
             {navigationBar}
-            <TopTab/>
+            {TopTab && <TopTab/>}
+
         </View>
     }
 }
+//PopularPage 订阅
+const mapPopularStateToProps = state => ({
+    //订阅了一个keys将其映射在props上面, 那就是language 这个reducer的keys
+    keys: state.language.keys
+})
+const mapPopularDispatchToProps = dispatch => ({
+    onLoadLanguage: (flag) => dispatch(actions.onLoadLanguage(flag))
+})
+export default connect(mapPopularStateToProps,mapPopularDispatchToProps)(PopularPage)
+
+
 
 const pageSize = 10;
 //PopolarTab让其进行绑定
