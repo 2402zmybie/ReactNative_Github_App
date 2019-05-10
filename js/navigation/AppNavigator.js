@@ -6,6 +6,8 @@ import DetailPage from '../page/DetailPage'
 import WebViewPage from '../page/WebViewPage'
 import AboutPage from '../page/about/AboutPage'
 import AboutMePage from '../page/about/AboutMePage'
+import CustomKeyPage from '../page/CustomKeyPage'
+import SortKeyPage from '../page/SortKeyPage'
 //引入react-redux
 import { connect } from 'react-redux'
 import {
@@ -54,7 +56,19 @@ const Main = createStackNavigator({
         navigationOptions: {
             header: null
         }
+    },
+    CustomKeyPage: {
+        screen: CustomKeyPage,
+        navigationOptions: {
+            header: null
+        }
+    },
+    SortKeyPage: {
+    screen: SortKeyPage,
+        navigationOptions: {
+        header: null
     }
+},
 })
 
 //建立欢迎页到首页导航

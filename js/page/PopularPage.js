@@ -72,7 +72,9 @@ class PopularPage extends Component<Props> {
                 },
                 indicatorStyle:styles.indicatorStyle,
                 labelStyle:styles.labelStyle
-            }
+            },
+            // 启用懒加载
+            lazy:true
         }): null
         //判断是否运行在iphone x上面
         return <View style={{flex:1, marginTop: DeviceInfo.isIPhoneX_deprecated? 30 : 0}}>
@@ -82,7 +84,6 @@ class PopularPage extends Component<Props> {
         </View>
     }
 }
-//PopularPage 订阅
 const mapPopularStateToProps = state => ({
     //订阅了一个keys将其映射在props上面, 那就是language 这个reducer的keys
     keys: state.language.keys

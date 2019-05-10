@@ -8,12 +8,14 @@ import AboutCommon,{ FLAG_ABOUT } from "./AboutCommon";
 const THEME_COLOR = '#678'
 //导入本地配置文件(在网络数据还没加载的情况下)
 import config from '../../res/data/config.json'
+import BackPressComponent from "../../common/BackPressComponent";
 
 //使用组装者模式来实现关于页面
 export default class AboutPage extends Component<Props> {
     constructor(props) {
         super(props)
         this.params = this.props.navigation.state.params;
+        this.backPress = new BackPressComponent({backPress: e => this.onBackPress(e)})
         //组装者的构造的第二个参数表示 将网络数据设置给state
         this.aboutCommon = new AboutCommon({
             ...this.params,
@@ -23,6 +25,17 @@ export default class AboutPage extends Component<Props> {
         this.state = {
             data: config
         }
+    }
+
+    onBackPress(e) {
+        NaivigationUtil.goBack(this.props.navigation)
+        return true
+    }
+    componentDidMount(): void {
+        this.backPress.componentDidMount()
+    }
+    componentWillUnmount(): void {
+        this.backPress.componentWillUnmount()
     }
 
     onClick(menu) {
